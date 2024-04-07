@@ -23,7 +23,7 @@ const Tinder = ({
 	params: { jobId: string };
 	searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-	const experience = searchParams["experience"];
+	const experience = searchParams["years"];
 	const degree = searchParams["degree"];
 	const skills = searchParams["skills"] as string;
 
