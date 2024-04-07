@@ -11,9 +11,10 @@ import {
 	serverTimestamp,
 	setDoc,
 	updateDoc,
+	where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { FaCheck, FaXmark } from "react-icons/fa6";
+import { FaCheck, FaChevronUp, FaXmark } from "react-icons/fa6";
 
 const Tinder = ({
 	params,
@@ -24,22 +25,79 @@ const Tinder = ({
 }) => {
 	const experience = searchParams["experience"];
 	const degree = searchParams["degree"];
-	const skills = searchParams["skills"];
+	const skills = searchParams["skills"] as string;
 
 	const [profiles, setProfiles] = useState([] as ProfileType[]);
 	const [loading, setLoading] = useState(true);
 	const [current, setCurrent] = useState(0);
 
 	useEffect(() => {
+		console.log(
+			degree
+				? experience
+					? skills?.length > 0
+						? "all 3"
+						: "degree & experience"
+					: skills?.length > 0
+					? "degree & skills"
+					: "degree only"
+				: experience
+				? skills?.length > 0
+					? "experience and skills"
+					: "experience"
+				: skills?.length > 0
+				? "skills only"
+				: "no filters"
+		);
+
 		const unsubDoc = onSnapshot(doc(db, "jobs", params.jobId), (doc) => {
 			const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-			console.log(doc.id);
 
 			setCurrent(doc.data()!.current);
 		});
 
 		const unsub = onSnapshot(
-			query(collection(db, `jobs/${params.jobId}/profiles`)),
+			degree
+				? experience
+					? skills?.length > 0
+						? query(
+								collection(db, `jobs/${params.jobId}/profiles`),
+								where("degree", "==", degree),
+								where("experience", ">=", Number(experience)),
+								where("skills", "array-contains-any", skills.split(","))
+						  )
+						: query(
+								collection(db, `jobs/${params.jobId}/profiles`),
+								where("degree", "==", degree),
+								where("experience", ">=", Number(experience))
+						  )
+					: skills?.length > 0
+					? query(
+							collection(db, `jobs/${params.jobId}/profiles`),
+							where("degree", "==", degree),
+							where("skills", "array-contains-any", skills.split(","))
+					  )
+					: query(
+							collection(db, `jobs/${params.jobId}/profiles`),
+							where("degree", "==", degree)
+					  )
+				: experience
+				? skills?.length > 0
+					? query(
+							collection(db, `jobs/${params.jobId}/profiles`),
+							where("experience", ">=", Number(experience)),
+							where("skills", "array-contains-any", skills.split(","))
+					  )
+					: query(
+							collection(db, `jobs/${params.jobId}/profiles`),
+							where("experience", ">=", Number(experience))
+					  )
+				: skills?.length > 0
+				? query(
+						collection(db, `jobs/${params.jobId}/profiles`),
+						where("skills", "array-contains-any", skills.split(","))
+				  )
+				: query(collection(db, `jobs/${params.jobId}/profiles`)),
 			(querySnapshot) => {
 				const freshProfiles: Array<ProfileType> = [];
 
@@ -50,25 +108,41 @@ const Tinder = ({
 						bookmarked: doc.data().bookmarked,
 						degree: doc.data().degree,
 						skills: doc.data().skills,
+						experience: doc.data().experience,
 						id: doc.id,
 					});
 				});
+
+				console.log(freshProfiles);
 
 				setProfiles(freshProfiles);
 
 				setLoading(false);
 			}
 		);
-	}, []);
+	}, [experience, degree, skills]);
 
 	return loading ? (
 		<div className="w-full h-screen grid place-items-center">Loading...</div>
 	) : current > profiles.length - 1 ? (
 		<div className="w-full h-screen grid place-items-center">
-			You're out of profiles!
+			<div className="space-y-2">
+				<div>You're out of profiles!</div>
+				<button
+					onClick={() => {
+						updateDoc(doc(db, `jobs/${params.jobId}`), {
+							current: 0,
+						});
+					}}
+					className="flex space-x-2 items-center w-full justify-center bg-neutral-300/50 rounded-md p-2"
+				>
+					<FaChevronUp />
+					<div>Restart</div>
+				</button>
+			</div>
 		</div>
 	) : (
-		<div className="overflow-clip h-screen p-20 flex items-center justify-between">
+		<div className="overflow-clip h-screen p-16 flex items-center justify-between">
 			<button
 				onClick={() =>
 					updateDoc(doc(db, `jobs/${params.jobId}`), {
@@ -80,7 +154,7 @@ const Tinder = ({
 				<FaXmark className="w-10 h-10" />
 			</button>
 
-			<div className="w-3/5 relative h-5/6 space-y-2">
+			<div className="w-1/2 relative h-5/6 space-y-2">
 				{current > 0 && profiles.length != 1 ? (
 					<Profile
 						goNext={() =>

@@ -35,18 +35,16 @@ const Profile = ({
 				<button
 					onClick={async () => {
 						await updateDoc(doc(db, `jobs/${jobId}/profiles/${profile.id}`), {
-							bookmarked: !profile.bookmarked,
+							bookmarked: true,
 						});
 						goNext();
 					}}
 				>
-					{profile.bookmarked ? (
-						<FaBookmark className="w-8 h-8" />
-					) : (
-						<FaRegBookmark className="w-8 h-8" />
-					)}
+					<FaRegBookmark className="w-8 h-8" />
 				</button>
 			</div>
+
+			<div>{profile.experience} years of experience</div>
 
 			<div>
 				<h2 className="text-2xl font-bold">Education</h2>

@@ -78,12 +78,14 @@ const Sidebar = () => {
 			<div className="space-y-8">
 				<Image src={Logo} alt="Recluto" width={200} />
 
-				{pathname.split("/")[1] != "" && pathname.split("/")[1] != "new" ? (
+				{pathname.split("/")[1] != "" &&
+				pathname.split("/")[1] != "new" &&
+				pathname.split("/")[1] != "profile" ? (
 					<div className="space-y-4">
 						<div className="border-b pb-4">
 							<Link href={`/`} className="flex space-x-4 items-center">
 								<FaChevronLeft className="h-4 w-6" />
-								<div className="text-2xl">All Openings</div>
+								<div className="text-2xl">All openings</div>
 							</Link>
 						</div>
 
@@ -190,22 +192,13 @@ const Sidebar = () => {
 								<div className="text-2xl "> Saved profiles</div>
 							</Link>
 						</div>
-						<div>
-							<Link
-								href={`/${pathname.split("/")[1]}/history`}
-								className="flex space-x-4 items-center"
-							>
-								<FaClockRotateLeft className="w-6 h-6" />
-								<div className="text-2xl">History</div>
-							</Link>
-						</div>
 					</div>
 				) : (
 					<div className="space-y-4">
 						<div>
 							<Link href={`/`} className="flex space-x-4 items-center">
 								<FaHouse className="h-6 w-6" />
-								<div className="text-2xl">All Openings</div>
+								<div className="text-2xl">All openings</div>
 							</Link>
 						</div>
 

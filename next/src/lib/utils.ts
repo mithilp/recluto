@@ -210,6 +210,7 @@ export type Profile = {
 	skills: string[];
 	bookmarked: boolean;
 	id: string;
+	experience: number;
 };
 
 export type Message = {
