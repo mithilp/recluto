@@ -17,6 +17,7 @@ const config = {
 			},
 		},
 		extend: {
+			translate: { "neg-full": "-100%" },
 			colors: {
 				popover: {
 					DEFAULT: "hsl(var(--popover))",

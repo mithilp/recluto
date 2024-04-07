@@ -202,3 +202,12 @@ export const skills = [
 	"Datadog",
 	"Zabbix",
 ];
+
+export type Profile = {
+	name: string;
+	school: string;
+	degree: string;
+	skills: string[];
+	bookmarked: boolean;
+	id: string;
+};
