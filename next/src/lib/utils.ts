@@ -211,3 +211,10 @@ export type Profile = {
 	bookmarked: boolean;
 	id: string;
 };
+
+export type Message = {
+	name: string;
+	message: string;
+	timestamp: Date;
+	id: string;
+};

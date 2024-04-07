@@ -1,15 +1,24 @@
+import { db } from "@/lib/firebase";
 import { Profile as ProfileType } from "@/lib/utils";
+import { doc, updateDoc } from "firebase/firestore";
+import { Lora } from "next/font/google";
 import React from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
+
+const lora = Lora({ subsets: ["latin"] });
 
 const Profile = ({
 	previous,
 	next,
 	profile,
+	jobId,
+	goNext,
 }: {
 	previous?: boolean;
 	next?: boolean;
 	profile: ProfileType;
+	jobId: string;
+	goNext: () => void;
 }) => {
 	return (
 		<div
@@ -17,13 +26,20 @@ const Profile = ({
 				previous
 					? "absolute bottom-12 translate-y-neg-full"
 					: next
-					? "absolute top-24 translate-y-full"
+					? "absolute top-12 translate-y-full"
 					: ""
 			} bg-violet-950 p-8 space-y-4 rounded-xl w-full h-full border-4 border-violet-300 shadow-lg text-white`}
 		>
 			<div className="flex justify-between items-center">
-				<h1 className="text-5xl font-black">{profile.name}</h1>
-				<button>
+				<h1 className={"text-4xl " + lora.className}>{profile.name}</h1>
+				<button
+					onClick={async () => {
+						await updateDoc(doc(db, `jobs/${jobId}/profiles/${profile.id}`), {
+							bookmarked: !profile.bookmarked,
+						});
+						goNext();
+					}}
+				>
 					{profile.bookmarked ? (
 						<FaBookmark className="w-8 h-8" />
 					) : (

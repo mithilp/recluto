@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 const config = {
 	content: [
 		"./pages/**/*.{ts,tsx}",
@@ -17,6 +19,9 @@ const config = {
 			},
 		},
 		extend: {
+			fontFamily: {
+				sans: ['"Nunito"', ...defaultTheme.fontFamily.sans],
+			},
 			translate: { "neg-full": "-100%" },
 			colors: {
 				popover: {
