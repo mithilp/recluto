@@ -207,10 +207,11 @@ export type Profile = {
 	name: string;
 	school: string;
 	degree: string;
-	skills: string[];
+	skills: string[] | string;
 	bookmarked: boolean;
 	id: string;
 	experience: number;
+	public_id: string;
 };
 
 export type Message = {

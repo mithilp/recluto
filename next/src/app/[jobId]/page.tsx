@@ -31,29 +31,14 @@ const Tinder = ({
 	const [loading, setLoading] = useState(true);
 	const [current, setCurrent] = useState(0);
 
-	useEffect(() => {
-		console.log(
-			degree
-				? experience
-					? skills?.length > 0
-						? "all 3"
-						: "degree & experience"
-					: skills?.length > 0
-					? "degree & skills"
-					: "degree only"
-				: experience
-				? skills?.length > 0
-					? "experience and skills"
-					: "experience"
-				: skills?.length > 0
-				? "skills only"
-				: "no filters"
-		);
+	const [title, setTitle] = useState("");
 
+	useEffect(() => {
 		const unsubDoc = onSnapshot(doc(db, "jobs", params.jobId), (doc) => {
 			const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
 
 			setCurrent(doc.data()!.current);
+			setTitle(doc.data()!.title);
 		});
 
 		const unsub = onSnapshot(
@@ -109,11 +94,10 @@ const Tinder = ({
 						degree: doc.data().degree,
 						skills: doc.data().skills,
 						experience: doc.data().experience,
+						public_id: doc.data().public_id,
 						id: doc.id,
 					});
 				});
-
-				console.log(freshProfiles);
 
 				setProfiles(freshProfiles);
 
@@ -199,6 +183,10 @@ const Tinder = ({
 			<button
 				onClick={async () => {
 					// send message to candidate
+
+					const response = await fetch(
+						`http://localhost:5000/send-message?title=${title}&name=${profiles[current].name}&id=${profiles[current].public_id}`
+					);
 
 					await setDoc(
 						doc(db, `jobs/${params.jobId}/messages/${profiles[current].id}`),

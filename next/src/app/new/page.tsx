@@ -20,6 +20,9 @@ const NewPosting = () => {
 		});
 
 		// send to python server to get profiles
+		const response = await fetch(
+			`http://localhost:5000?degree=&title=${title}&experience=&jobId=${doc.id}&n=${numberOfProfiles}`
+		);
 
 		// redirect to job page
 		redirect(`/${doc.id}`);

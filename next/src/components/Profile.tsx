@@ -20,6 +20,26 @@ const Profile = ({
 	jobId: string;
 	goNext: () => void;
 }) => {
+	const correctSkills: string[] =
+		typeof profile.skills == "string"
+			? profile.skills
+					.split("[")[1]
+					.split("]")[0]
+					.split('",')
+					.map((skill) => skill.replace('"', ""))
+			: profile.skills;
+
+	console.log(
+		typeof profile.skills == "string" &&
+			profile.skills
+				.split("[")[1]
+				.split("]")[0]
+				.split('",')
+				.map((skill) => skill.replace('"', ""))
+				.map((skill) => skill.replace('"', ""))
+				.map((skill) => skill.trim())
+	);
+
 	return (
 		<div
 			className={`${
@@ -66,7 +86,7 @@ const Profile = ({
 				<h2 className="text-2xl font-bold">Top Skills</h2>
 				<div className="text-xl">
 					<ol className="list-decimal ml-8">
-						{profile.skills.slice(0, 3).map((skill) => (
+						{correctSkills.slice(0, 3).map((skill) => (
 							<li key={skill}>{skill}</li>
 						))}
 					</ol>
@@ -75,7 +95,7 @@ const Profile = ({
 
 			<div>
 				<h2 className="text-2xl font-bold">All Skills</h2>
-				<div className="text-xl">{profile.skills.join(" • ")}</div>
+				<div className="text-sm">{correctSkills.join(" • ")}</div>
 			</div>
 		</div>
 	);
