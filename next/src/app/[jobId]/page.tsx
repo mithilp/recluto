@@ -184,9 +184,11 @@ const Tinder = ({
 				onClick={async () => {
 					// send message to candidate
 
-					const response = await fetch(
-						`https://127.0.0.1/send-message?title=${title}&name=${profiles[current].name}&id=${profiles[current].public_id}`
-					);
+					try {
+						const response = await fetch(
+							`https://127.0.0.1/send-message?title=${title}&name=${profiles[current].name}&id=${profiles[current].public_id}`
+						);
+					} catch (error) {}
 
 					await setDoc(
 						doc(db, `jobs/${params.jobId}/messages/${profiles[current].id}`),

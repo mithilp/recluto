@@ -83,7 +83,7 @@ const Profile = ({
 			</div>
 
 			<div>
-				<h2 className="text-2xl font-bold">Top Skills</h2>
+				<h2 className="text-2xl font-bold">Top skills</h2>
 				<div className="text-xl">
 					<ol className="list-decimal ml-8">
 						{correctSkills.slice(0, 3).map((skill) => (
@@ -94,7 +94,7 @@ const Profile = ({
 			</div>
 
 			<div>
-				<h2 className="text-2xl font-bold">All Skills</h2>
+				<h2 className="text-2xl font-bold">All skills</h2>
 				<div className="text-sm">{correctSkills.join(" • ")}</div>
 			</div>
 		</div>
