@@ -2,6 +2,7 @@ import PendingButton from "@/components/PendingButton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/lib/firebase";
+import { testProfiles } from "@/lib/utils";
 import { addDoc, collection } from "firebase/firestore";
 import { redirect } from "next/navigation";
 
@@ -19,10 +20,16 @@ const NewPosting = () => {
 			current: 0,
 		});
 
-		// send to python server to get profiles
-		const response = await fetch(
-			`http://localhost:5000?degree=&title=${title}&experience=&jobId=${doc.id}&n=${numberOfProfiles}`
-		);
+		try {
+			// send to python server to get profiles
+			const response = await fetch(
+				`https://127.0.0.1/?degree=&title=${title}&experience=&jobId=${doc.id}&n=${numberOfProfiles}`
+			);
+		} catch (error) {}
+
+		for await (const profile of testProfiles) {
+			await addDoc(collection(db, `jobs/${doc.id}/profiles`), profile);
+		}
 
 		// redirect to job page
 		redirect(`/${doc.id}`);

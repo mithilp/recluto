@@ -185,7 +185,7 @@ const Tinder = ({
 					// send message to candidate
 
 					const response = await fetch(
-						`http://localhost:5000/send-message?title=${title}&name=${profiles[current].name}&id=${profiles[current].public_id}`
+						`https://127.0.0.1/send-message?title=${title}&name=${profiles[current].name}&id=${profiles[current].public_id}`
 					);
 
 					await setDoc(
