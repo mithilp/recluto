@@ -13,16 +13,16 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { FaCheck, FaChevronUp, FaXmark } from "react-icons/fa6";
 
-const Saved = ({
-	params,
-	searchParams,
-}: {
-	params: { jobId: string };
-	searchParams: { [key: string]: string | string[] | undefined };
+const Saved = (props: {
+	params: Promise<{ jobId: string }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
+	const params = use(props.params);
+	const searchParams = use(props.searchParams);
+
 	const experience = searchParams["experience"];
 	const degree = searchParams["degree"];
 	const skills = searchParams["skills"] as string;
@@ -48,6 +48,7 @@ const Saved = ({
 						degree: doc.data().degree,
 						skills: doc.data().skills,
 						experience: doc.data().experience,
+						public_id: doc.data().public_id,
 						id: doc.id,
 					});
 				});

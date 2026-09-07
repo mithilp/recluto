@@ -13,16 +13,16 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { FaCheck, FaChevronUp, FaXmark } from "react-icons/fa6";
 
-const Tinder = ({
-	params,
-	searchParams,
-}: {
-	params: { jobId: string };
-	searchParams: { [key: string]: string | string[] | undefined };
+const Tinder = (props: {
+	params: Promise<{ jobId: string }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
+	const params = use(props.params);
+	const searchParams = use(props.searchParams);
+
 	const experience = searchParams["years"];
 	const degree = searchParams["degree"];
 	const skills = searchParams["skills"] as string;

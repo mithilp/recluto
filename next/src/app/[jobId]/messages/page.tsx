@@ -3,9 +3,11 @@
 import { db } from "@/lib/firebase";
 import { Message } from "@/lib/utils";
 import { collection, onSnapshot, query } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 
-const Leads = ({ params }: { params: { jobId: string } }) => {
+const Leads = (props: { params: Promise<{ jobId: string }> }) => {
+	const params = use(props.params);
+
 	const [messages, setMessages] = useState([] as Message[]);
 	const [loading, setLoading] = useState(false);
 

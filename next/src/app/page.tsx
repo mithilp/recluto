@@ -3,11 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 
-const Home = async ({
-	searchParams,
-}: {
-	searchParams: { [key: string]: string | string[] | undefined };
-}) => {
+const Home = async () => {
 	const getData = async () => {
 		const docs = await getDocs(collection(db, "jobs"));
 
